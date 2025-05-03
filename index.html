@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FMC Coordinate Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>FMC Coordinate Converter</h2>
+        <label for="coordInput">Enter coordinate (e.g., 40.8195°N, 124.1205°W):</label>
+        <input type="text" id="coordInput" placeholder="40.8195°N, 124.1205°W">
+        <button onclick="convertToFMC()">Convert</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function convertToFMC() {
+            const input = document.getElementById("coordInput").value.trim();
+            const regex = /([0-9.]+)°([NS]),\s*([0-9.]+)°([EW])/;
+            const match = input.match(regex);
+
+            if (!match) {
+                document.getElementById("result").textContent = "Invalid coordinate format.";
+                return;
+            }
+
+            let latVal = parseFloat(match[1]);
+            let latDir = match[2];
+            let lonVal = parseFloat(match[3]);
+            let lonDir = match[4];
+
+            let latDeg = Math.floor(latVal);
+            let latMin = Math.floor((latVal - latDeg) * 60);
+            let lonDeg = Math.floor(lonVal);
+            let lonMin = Math.floor((lonVal - lonDeg) * 60);
+
+            let latFmt = (latDeg < 10 ? "0" : "") + latDeg + (latMin < 10 ? "0" : "") + latMin + latDir;
+            let lonFmt = (lonDeg < 100 ? (lonDeg < 10 ? "00" : "0") : "") + lonDeg + (lonMin < 10 ? "0" : "") + lonMin + lonDir;
+
+            document.getElementById("result").textContent = "FMC Format Coordinate: " + latFmt + lonFmt;
+        }
+    </script>
+</body>
+</html>
